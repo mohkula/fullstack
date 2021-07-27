@@ -28,6 +28,20 @@ let notes = [
       important: true
     }
   ]
+
+  let persons =  [
+    {
+      "name": "Arto Hellas",
+      "number": "273645363",
+      "id": "Arto Hellas"
+    },
+    {
+      "name": "Quentin Tarantino.",
+      "number": "12323123",
+      "id": "Quentin Tarantino"
+    }
+  ]
+
   app.get('/', (req, res) => {
     res.send('<h1>Hello World!</h1>')
   })
@@ -36,6 +50,35 @@ let notes = [
     res.json(notes)
   })
 
+  app.get('/api/persons', (req, res) => {
+    res.json(persons)
+  })
+
+  app.post('/api/persons', (req,res) =>{
+    const body = req.body
+  
+    if (!body.name || !body.number) {
+      return res.status(400).json({ 
+        error: 'Give a name and a number' 
+      })
+    }
+
+   // if(persons.map(person => person.name === body.name)){
+     // return res.status(400).json({ 
+      //  error: 'Name already exists' 
+     // })
+ //   }
+  
+    const person = {
+      name: body.name,
+      number: body.number,
+      id: body.name
+    }
+  
+    persons = persons.concat(person)
+  
+    response.json(person)
+  })
 
   app.get('/api/notes/:id', (request, response) => {
   const id = Number(request.params.id)
