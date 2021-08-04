@@ -86,6 +86,12 @@ const App = () => {
     }, 5000)
 
     })
+    .catch(error =>{
+      setErrorMessage(JSON.stringify(error.response.data))
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    })
   }
 
   else{
