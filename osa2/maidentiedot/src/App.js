@@ -6,14 +6,18 @@ import axios from 'axios'
 import FindCountriesForm from './FindCountriesForm'
 import ShowFiltered from './ShowFiltered'
 import ShowCountryInfo from './ShowCountryInfo'
+import ShowWeatherInfo from './ShowWeatherInfo';
 
 
 const App = () => {
+
+  const api_key = process.env.REACT_APP_API_KEY
 
 
   const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState('')
   const [selectedCountry, setSelectedCountry] = useState('')
+  const [weatherData, setWeatherData] = useState('')
 
 
   useEffect(() => {
@@ -24,8 +28,11 @@ const App = () => {
         console.log('promise fulfilled')
         setCountries(response.data)
       })
+
+      
   }, [])
 
+  
 
   const handleFilterChange = (event) =>{
 
@@ -35,6 +42,13 @@ const App = () => {
     const handleButtonClick = (country) => {
     
       setSelectedCountry(country)
+
+      const url = `http://api.weatherstack.com/current?access_key=${api_key}&query=${country.capital}`
+      axios
+      .get(url)
+      .then(response => {
+        setWeatherData(response.data)
+      })
 
     }
 
@@ -49,6 +63,22 @@ const App = () => {
     <ShowFiltered countries={countries} filter={filter} handleButtonClick={handleButtonClick} />
 
     <ShowCountryInfo country={selectedCountry} />
+  
+  {weatherData.current ? <ShowWeatherInfo weather={weatherData}/> : 
+  <div>
+    
+  </div>
+
+  }
+    {/* {selectedCountry === '' ? 
+    
+    
+      <div></div>
+      :
+    
+      <ShowWeatherInfo weather={weatherData}/>
+
+    } */}
     
     </div>
   )
