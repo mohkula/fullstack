@@ -52,10 +52,14 @@ const mostBlogs = (blogs) =>{
   
   if (helper > mB){
     authorWithMostBlogs = currentAuthor
+    mB = helper
 
   }
 
-  return authorWithMostBlogs
+  return {"author": authorWithMostBlogs,
+  "blogs": mB
+  
+  }
 
   
 }

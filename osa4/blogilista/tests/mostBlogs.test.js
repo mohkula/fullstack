@@ -134,13 +134,23 @@ describe('most Blogs by author', () => {
 
     test('Author with most blogs is the result', () => {
         const result = listHelper.mostBlogs(listWithMultipleBlogs)
-        expect(result).toBe("Robert C. Martin")
+        expect(result).toEqual(
+            {
+                author: "Robert C. Martin",
+                blogs: 3
+              }
+        )
         
       })
 
       test('Author with most blogs is the result2', () => {
         const result = listHelper.mostBlogs(listWithDijkstraAsTheWinner)
-        expect(result).toBe("Edsger W. Dijkstra")
+        expect(result).toEqual(
+            {
+                author: "Edsger W. Dijkstra",
+                blogs: 4
+              }
+        )
         
       })
 
