@@ -34,7 +34,7 @@ const mostBlogs = (blogs) =>{
   for(var i = 0; i < blogs.length; i++ ){
     if(blogs[i].author === currentAuthor){
       helper ++
-//122333
+
     }
     else{
       
@@ -61,12 +61,43 @@ const mostBlogs = (blogs) =>{
   
   }
 
-  
 }
+
+
+const mostLikes = (blogs) => {
+
+  const allAuthors = [... new Set(blogs.map(blog => blog.author))]
+  
+  var authorAndLikes = []
+  allAuthors.map(author =>{
+
+    authorAndLikes[author] = 0
+
+  })
+
+  blogs.map(blog =>{
+    authorAndLikes[blog.author] += blog.likes
+  })
+
+var mostLikedAuthor 
+var helper = 0
+for(var i = 0; i < allAuthors.length; i++){
+  if(authorAndLikes[allAuthors[i]] > helper){
+    helper = authorAndLikes[allAuthors[i]]
+    mostLikedAuthor = allAuthors[i]
+  }
+}
+
+return {"author": mostLikedAuthor,
+"likes": helper}
+}
+
+
   
   module.exports = {
     dummy,
     totalLikes,
     favouriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
   }

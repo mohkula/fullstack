@@ -1,9 +1,16 @@
 const listHelper = require('../utils/list_helper')
 
-describe('most Blogs by author', () => {
+describe('most likes by author', () => {
     
     const listWithMultipleBlogs =  [
-        
+        {
+          _id: "5a422a851b54a676234d17f7",
+          title: "React patterns",
+          author: "Michael Chan",
+          url: "https://reactpatterns.com/",
+          likes: 7,
+          __v: 0
+        },
         {
           _id: "5a422aa71b54a676234d17f8",
           title: "Go To Statement Considered Harmful",
@@ -12,14 +19,6 @@ describe('most Blogs by author', () => {
           likes: 5,
           __v: 0
         },
-        {
-            _id: "5a422a851b54a676234d17f7",
-            title: "React patterns",
-            author: "Michael Chan",
-            url: "https://reactpatterns.com/",
-            likes: 7,
-            __v: 0
-          },
         {
           _id: "5a422b3a1b54a676234d17f9",
           title: "Canonical string reduction",
@@ -44,7 +43,6 @@ describe('most Blogs by author', () => {
           likes: 0,
           __v: 0
         },
-        
         {
           _id: "5a422bc61b54a676234d17fc",
           title: "Type wars",
@@ -57,8 +55,15 @@ describe('most Blogs by author', () => {
 
 
 
-      const listWithDijkstraAsTheWinner =  [
-        
+      const listWithSuperiorRobert =  [
+        {
+          _id: "5a422a851b54a676234d17f7",
+          title: "React patterns",
+          author: "Michael Chan",
+          url: "https://reactpatterns.com/",
+          likes: 7,
+          __v: 0
+        },
         {
           _id: "5a422aa71b54a676234d17f8",
           title: "Go To Statement Considered Harmful",
@@ -68,14 +73,6 @@ describe('most Blogs by author', () => {
           __v: 0
         },
         {
-            _id: "5a422a851b54a676234d17f7",
-            title: "React patterns",
-            author: "Michael Chan",
-            url: "https://reactpatterns.com/",
-            likes: 7,
-            __v: 0
-          },
-        {
           _id: "5a422b3a1b54a676234d17f9",
           title: "Canonical string reduction",
           author: "Edsger W. Dijkstra",
@@ -83,22 +80,6 @@ describe('most Blogs by author', () => {
           likes: 12,
           __v: 0
         },
-        {
-            _id: "5a422b3a1b54a676234d17f9",
-            title: "Canonical string reduction2",
-            author: "Edsger W. Dijkstra",
-            url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-            likes: 12,
-            __v: 0
-          },
-          {
-            _id: "5a422b3a1b54a676234d17f9",
-            title: "Canonical string reduction3",
-            author: "Edsger W. Dijkstra",
-            url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-            likes: 12,
-            __v: 0
-          },
         {
           _id: "5a422b891b54a676234d17fa",
           title: "First class tests",
@@ -112,10 +93,9 @@ describe('most Blogs by author', () => {
           title: "TDD harms architecture",
           author: "Robert C. Martin",
           url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-          likes: 0,
+          likes: 6,
           __v: 0
         },
-        
         {
           _id: "5a422bc61b54a676234d17fc",
           title: "Type wars",
@@ -126,33 +106,28 @@ describe('most Blogs by author', () => {
         }  
       ]
 
-    
+
+
+
 
   
     
       
 
-    test('Author with most blogs is the result', () => {
-        const result = listHelper.mostBlogs(listWithMultipleBlogs)
+    test('author with most likes is the result', () => {
+        const result = listHelper.mostLikes(listWithMultipleBlogs)
         expect(result).toEqual(
-            {
-                author: "Robert C. Martin",
-                blogs: 3
-              }
+            { author: 'Edsger W. Dijkstra', likes: 17 }
+            
         )
-        
       })
 
-      test('Author with most blogs is the result2', () => {
-        const result = listHelper.mostBlogs(listWithDijkstraAsTheWinner)
-        listHelper.mostLikes(listWithMultipleBlogs)
+      test('author with most likes is the result2', () => {
+        const result = listHelper.mostLikes(listWithSuperiorRobert)
         expect(result).toEqual(
-            {
-                author: "Edsger W. Dijkstra",
-                blogs: 4
-              }
+            { author: 'Robert C. Martin', likes: 18 }
+            
         )
-        
       })
 
   })
