@@ -1,6 +1,6 @@
 const listHelper = require('../utils/list_helper')
 
-describe('most likes', () => {
+describe('favourite blog', () => {
     
     const listWithMultipleBlogs =  [
         {
