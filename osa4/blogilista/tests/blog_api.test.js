@@ -78,11 +78,26 @@ test('likes field default is 0', async () =>{
       
   })
 
-  blogWithoutLikes.save()
+ await blogWithoutLikes.save()
 
   const response = await api.get('/api/blogs')
 
   expect((response.body[response.body.length -1]).likes).toBe(0)
+})
+
+
+test('no title returns bad request', async () =>{
+  const blogWithoutTitle = new Blog({
+    
+      "author": "blogimies",
+      "url": "http://blogi"
+      
+  })
+const response = await api.post(blogWithoutTitle)
+expect(response.status).toBe(400)
+
+
+
 })
 
 
