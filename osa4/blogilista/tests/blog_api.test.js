@@ -100,6 +100,11 @@ expect(response.status).toBe(400)
 
 })
 
+test('delete blog', async () => {
+  const result = await api.delete('/2')
+ 
+})
+
 
   test('Id is defined', async () => {
     const result = await api.get('/api/blogs')
