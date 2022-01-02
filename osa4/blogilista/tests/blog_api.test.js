@@ -69,6 +69,23 @@ test('all blogs are returned', async () => {
     expect(response.body).toHaveLength(2)
   })
 
+test('likes field default is 0', async () =>{
+
+  const blogWithoutLikes = new Blog({
+    "title": "blogi3",
+      "author": "blogimies",
+      "url": "http://blogi"
+      
+  })
+
+  blogWithoutLikes.save()
+
+  const response = await api.get('/api/blogs')
+
+  expect((response.body[response.body.length -1]).likes).toBe(0)
+})
+
+
   test('Id is defined', async () => {
     const result = await api.get('/api/blogs')
 
