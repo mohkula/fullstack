@@ -45,7 +45,23 @@ beforeEach(async () => {
   await blogObject.save()
 })
 
+test('adding a blog increases total blogs by one', async () =>{
+  const blogs = await api.get('/api/blogs')
 
+  const newBlog = new Blog({
+    "title": "blogi3",
+      "author": "blogimies",
+      "url": "http://blogi",
+      "likes": 61
+  })
+
+  await newBlog.save()
+
+  const response = await api.get('/api/blogs')
+
+  expect(response.body).toHaveLength(blogs.body.length + 1)
+
+})
 
 test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs')
@@ -62,10 +78,5 @@ test('all blogs are returned', async () => {
       expect(blog.id).toBeDefined();
     })
   
-  
-
-
-
-    
   });
 
