@@ -16,42 +16,10 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 
 
-const initialBlogs = [
 
-  {
-      
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-      likes: 5,
-      __v: 0
-    },
-    {
-        
-        title: 'Go To Statement Considered Harmful',
-        author: 'Edsger W. Dijkstra',
-        url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-        likes: 25,
-        __v: 0
-      },
-      {
-        
-        title: 'Go To Statement Considered Harmful',
-        author: 'Edsger W. Dijkstra',
-        url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-        likes: 15,
-        __v: 0
-      },
-
-]
 
 
 beforeEach(async () => {
-  await Blog.deleteMany({})
-  let blogObject = new Blog(initialBlogs[0])
-  await blogObject.save()
-  blogObject = new Blog(initialBlogs[1])
-  await blogObject.save()
 
   await User.deleteMany({})
 
@@ -65,7 +33,7 @@ test('creation succeeds with a fresh username', async () => {
     const usersAtStart = await usersInDb()
 
     const newUser = {
-      username: 'mm',
+      username: 'mmmm',
       name: 'mmm',
       password: 'salainen',
     }
@@ -102,4 +70,38 @@ test('creation fails with proper statuscode and message if username already take
 
     const usersAtEnd = await usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+  test('creation fails with too short password', async () => {
+
+    const newUser = {
+      username: 'rrrr',
+      name: 'mmm',
+      password: 'ss',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+
+      expect(result.body.error).toContain('Password too short')
+
+  })
+
+  test('creation fails with no username', async () => {
+
+    const newUser = {
+      
+      name: 'mmm',
+      password: 'sdds',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+
+      expect(result.body.error).toContain('No username given')
+
   })
