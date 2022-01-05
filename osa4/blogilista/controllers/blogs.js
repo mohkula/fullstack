@@ -1,11 +1,12 @@
 const blogsRouter = require('express').Router()
 const { urlencoded } = require('express')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 
 blogsRouter.get('/', async (request, response) => {
 
-  const blogs = await Blog.find({})
+  const blogs = await Blog.find({}).populate('user', {username: 1, name: 1})
   response.json(blogs.map(blog => blog.toJSON()))
   
   })
@@ -22,15 +23,34 @@ blogsRouter.get('/', async (request, response) => {
   
   blogsRouter.post('/', async (request, response) => {
     
-    const blog = new Blog(request.body)
+    const body = request.body
+
+    const users = await User.find({})
+
+    const user = users[0]
+
+
+    const blog = new Blog({
+      title: body.title,
+      author: body.author,
+      url: body.url,
+      likes: body.likes,
+      user: user._id
+
+    })
 
     if(blog.title === undefined || blog.author === undefined){
       return response.status(400).json({ error: 'content missing' })
     }
   
-    await blog.save()
-    response.status(201)
+    const savedBlog = await blog.save()
 
+
+    user.blogs = user.blogs.concat(savedBlog._id)
+ 
+    await user.save()
+
+    response.json(savedBlog.toJSON())
     
       
   })
