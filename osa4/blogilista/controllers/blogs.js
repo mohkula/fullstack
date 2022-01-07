@@ -5,13 +5,7 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7)
-  }
-  return null
-}
+
 
 
 blogsRouter.get('/', async (request, response) => {
@@ -32,23 +26,27 @@ blogsRouter.get('/', async (request, response) => {
     })
   
   blogsRouter.post('/', async (request, response) => {
-    
+  
     const body = request.body
 
-    const token = getTokenFrom(request)
-    console.log("token: ", token)
+    
+
+    const token = request.token
+
+    
+    
     let decodedToken = null
     try {
      decodedToken = jwt.verify(token, process.env.SECRET)
 
     } catch (error) {
-      console.log("jaa")
+      
       return response.status(401).json({ error: 'token missing or invalid' })
 
     }
     
     if (!token || !decodedToken.id) {
-      console.log("jaa")
+      
       return response.status(401).json({ error: 'token missing or invalid' })
     }
     const user = await User.findById(decodedToken.id)
