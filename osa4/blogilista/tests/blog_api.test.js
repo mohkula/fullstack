@@ -3,8 +3,13 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 
+const User = require('../models/user')
+
 const api = supertest(app)
 const Blog = require('../models/blog')
+
+const bcrypt = require('bcrypt')
+
 
 
 const initialBlogs = [
@@ -43,10 +48,34 @@ beforeEach(async () => {
   await blogObject.save()
   blogObject = new Blog(initialBlogs[1])
   await blogObject.save()
+
+  await User.deleteMany({})
+
+  const passwordHash = await bcrypt.hash('sekret', 10)
+  const userInDB = new User({ username: 'root', passwordHash })
+
+  await userInDB.save()
 })
 
 test('adding a blog increases total blogs by one', async () =>{
+
+  const user = await api.post('/api/login')
+  .send({
+    "username": "root",
+    "password": "sekret"
+  
+  })
+  .expect(200)
+
+  const token = user.body.token
+
+  
+
+
+
   const blogs = await api.get('/api/blogs')
+
+  
 
   const newBlog = new Blog({
     "title": "blogi3",
@@ -55,9 +84,18 @@ test('adding a blog increases total blogs by one', async () =>{
       "likes": 61
   })
 
-  await newBlog.save()
+const a = await api.post('/api/blogs')
+.set({Authorization: "bearer " + token})
+.send(newBlog)
 
-  const response = await api.get('/api/blogs')
+
+console.log(a.body)
+
+
+
+
+
+const response = await api.get('/api/blogs')
 
   expect(response.body).toHaveLength(blogs.body.length + 1)
 
@@ -100,10 +138,7 @@ expect(response.status).toBe(400)
 
 })
 
-test('delete blog', async () => {
-  const result = await api.delete('/2')
- 
-})
+
 
 
   test('Id is defined', async () => {

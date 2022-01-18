@@ -29,6 +29,17 @@ beforeEach(async () => {
   await user.save()
 })
 
+
+test('logging in succeeds with existing user', async () => {
+  await api.post('/api/login')
+  .send({
+    "username": "root",
+    "password": "sekret"
+  
+  })
+  .expect(200)
+})
+
 test('creation succeeds with a fresh username', async () => {
     const usersAtStart = await usersInDb()
 
