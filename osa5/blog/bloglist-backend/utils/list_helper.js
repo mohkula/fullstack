@@ -1,103 +1,57 @@
-const dummy = (blogs) => {
-    return 1
-  }
+const _ = require('lodash')
 
 const totalLikes = (blogs) => {
-      var likes = 0
-      blogs.map( blog =>{
-        likes += (blog.likes)
-      })
-    return likes
+  if ( blogs.length===0) {
+    return 0
   }
 
-const favouriteBlog = (blogs) =>{
-  var favBlog = blogs[0]
-
-  blogs.map(blog =>{
-    if (blog.likes > favBlog.likes){
-      favBlog = blog
-    } 
-  })
-
-  return favBlog
+  return blogs.reduce((s, b) => s + b.likes, 0)
 }
 
-const mostBlogs = (blogs) =>{
-  blogs.sort(function(a,b){
-    return a.author.localeCompare(b.author)
-  })
-  
-  var authorWithMostBlogs = blogs[0].author
-  var mB = 0
-  var helper = 0
-  var currentAuthor = blogs[0].author
-  for(var i = 0; i < blogs.length; i++ ){
-    if(blogs[i].author === currentAuthor){
-      helper ++
+const favoriteBlog = (blogs) => {
+  if ( blogs.length===0) {
+    return null
+  }
 
-    }
-    else{
-      
-      if (helper > mB){
-        mB = helper
-        authorWithMostBlogs = currentAuthor
-        
-      }
-      currentAuthor = blogs[i].author
-        helper = 0
+  const withMostVotes = (best, current) => {
+    if ( !best ) {
+      return current
     }
 
-  }
-  helper++
-  
-  if (helper > mB){
-    authorWithMostBlogs = currentAuthor
-    mB = helper
-
+    return best.likes > current.likes ? best : current
   }
 
-  return {"author": authorWithMostBlogs,
-  "blogs": mB
-  
-  }
-
+  return blogs.reduce(withMostVotes , null)
 }
 
+const mostBlogs = (blogs) => {
+  if ( blogs.length===0) {
+    return null
+  }
+
+  const blogsByAuthor = _.toPairs(_.groupBy(blogs, b => b.author))
+  const blockCountByAuthor = blogsByAuthor.map(([author, blogs]) => ({
+    author, 
+    blogs: blogs.length
+  }) ).sort((a1, a2 ) => a2.blogs - a1.blogs)
+
+  return blockCountByAuthor[0]
+}
 
 const mostLikes = (blogs) => {
-
-  const allAuthors = [... new Set(blogs.map(blog => blog.author))]
-  
-  var authorAndLikes = []
-  allAuthors.map(author =>{
-
-    authorAndLikes[author] = 0
-
-  })
-
-  blogs.map(blog =>{
-    authorAndLikes[blog.author] += blog.likes
-  })
-
-var mostLikedAuthor 
-var helper = 0
-for(var i = 0; i < allAuthors.length; i++){
-  if(authorAndLikes[allAuthors[i]] > helper){
-    helper = authorAndLikes[allAuthors[i]]
-    mostLikedAuthor = allAuthors[i]
+  if ( blogs.length===0) {
+    return null
   }
+
+  const blogsByAuthor = _.toPairs(_.groupBy(blogs, b => b.author))
+  const likeCountByAuthor = blogsByAuthor.map(([author, blogs]) => ({
+    author, 
+    likes: blogs.reduce((s, b) => s + b.likes, 0)
+  }) ).sort((a1, a2 ) => a2.likes - a1.likes)
+
+  return likeCountByAuthor[0]
 }
 
-return {"author": mostLikedAuthor,
-"likes": helper}
+module.exports = {
+  totalLikes, favoriteBlog, mostBlogs, mostLikes
 }
-
-
-  
-  module.exports = {
-    dummy,
-    totalLikes,
-    favouriteBlog,
-    mostBlogs,
-    mostLikes
-  }
