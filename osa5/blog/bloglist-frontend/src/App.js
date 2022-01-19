@@ -7,7 +7,11 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState('')
+  const [newTitle, setnewTitle] = useState('')
+  const [newAuthor, setnewAuthor] = useState('')
+
+  const [newUrl, setnewUrl] = useState('')
+
 
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('') 
@@ -64,11 +68,38 @@ const App = () => {
 
   const addBlog = (event) =>{
     event.preventDefault()
+
+
+    const blogObject = {
+      title: newTitle,
+      author: newAuthor,
+      url: newUrl
+      
+    }
+
+    //console.log(blogObject)
+
+    blogService
+      .create(blogObject)
+        .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setnewAuthor('')
+        setnewTitle('')
+        setnewUrl('')
+      })
+
   }
 
-  const handleBlogChange = (event) =>{
-    console.log(event.target.value)
-    setNewBlog(event.target.value)
+  const handleAuthorChange = (event) =>{
+    setnewAuthor(event.target.value)
+  }
+
+  const handleTitleChange = (event) =>{
+    setnewTitle(event.target.value)
+  }
+
+  const handleUrlChange = (event) =>{
+    setnewUrl(event.target.value)
   }
 
   const logoutForm = () => (
@@ -104,13 +135,27 @@ const App = () => {
   )
 
   const blogForm = () => (
+    <div>
     <form onSubmit={addBlog}>
-      <input
-        value={newBlog}
-        onChange={handleBlogChange}
+    title:   <input
+        title={newTitle}
+        onChange={handleTitleChange}
       />
-      <button type="submit">save</button>
+
+      <p></p>
+       author: <input 
+        author={newAuthor}
+        onChange={handleAuthorChange}
+      />
+      <p></p>
+       url: <input
+        url={newUrl}
+        onChange={handleUrlChange}
+      />
+      <button type="submit">create</button>
     </form>  
+
+    </div>
   )
 
 
