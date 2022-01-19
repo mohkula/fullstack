@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 
+import Notification from './components/Notification'
+
 import loginService from './services/login' 
 
 
@@ -12,6 +14,7 @@ const App = () => {
 
   const [newUrl, setnewUrl] = useState('')
 
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('') 
@@ -77,7 +80,6 @@ const App = () => {
       
     }
 
-    //console.log(blogObject)
 
     blogService
       .create(blogObject)
@@ -86,7 +88,21 @@ const App = () => {
         setnewAuthor('')
         setnewTitle('')
         setnewUrl('')
+        
+        setNotificationMessage(`a new blog ${blogObject.title} by  ${blogObject.author} added` )
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
       })
+      .catch(error => {
+      console.log(error)
+      setErrorMessage('failed to add a blog')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    })
+
+    
 
   }
 
@@ -112,6 +128,9 @@ const App = () => {
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
+
+<p><h2>log in to the application</h2></p>
+
       <div>
         username
           <input
@@ -136,6 +155,7 @@ const App = () => {
 
   const blogForm = () => (
     <div>
+      <p><h2>create a new blog</h2></p>
     <form onSubmit={addBlog}>
     title:   <input
         title={newTitle}
@@ -161,13 +181,20 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
+      
+
+      <Notification message={errorMessage} />
+      <Notification message={notificationMessage} />
+
+
 
       {user === null ?
       loginForm() :
       <div>
         <p>{user.name} logged in</p> 
         {logoutForm()}
+
+        <h2>blogs</h2>
         {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
