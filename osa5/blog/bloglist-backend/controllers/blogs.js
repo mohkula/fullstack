@@ -17,8 +17,15 @@ router.delete('/:id', async (request, response) => {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
 
+
+
   const user = await User.findById(decodedToken.id)
+
+
   const blog = await Blog.findById(request.params.id)
+
+
+
   if (blog.user.toString() !== user.id.toString()) {
     return response.status(401).json({ error: 'only the creator can delete blogs' })
   }
