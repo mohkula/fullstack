@@ -22,9 +22,21 @@ const App = () => {
 
 
   useEffect(() => {
+    const sortBlogs = (blogs) =>{
+      console.log('sorting')
+      const sorted = blogs.sort(function(a,b){
+        return a.likes -b.likes
+      })
+  return sorted
+      
+    }
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      
+      setBlogs( sortBlogs(blogs) )
+      
+
     )  
+    
   }, [])
 
   useEffect(() => {
@@ -36,7 +48,7 @@ const App = () => {
     }
   }, [])
 
-
+ 
   
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -103,6 +115,8 @@ const App = () => {
 
     
       setBlogs(blogs.map(blog => blog.id !== response.id ? blog : blogObject ))
+
+      
     
 
   }
