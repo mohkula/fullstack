@@ -1,5 +1,5 @@
 import React, {useState} from 'react' 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, like }) => {
   
   const [visible, setVisible] = useState(false)
 
@@ -7,6 +7,20 @@ const Blog = ({ blog }) => {
   const changeVisibility = () =>{
     setVisible(!visible)
   }
+
+  const handleLike = () =>{
+
+    const likes = blog.likes + 1
+    like({
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes : likes,
+      id : blog.id
+  })
+  }
+
+  
 
 
   const blogStyle = {
@@ -25,7 +39,7 @@ return(
 <div>
 <div>{blog.title} by {blog.author} </div>
     <div>{blog.url}</div>
- <div>likes: {blog.likes}</div>
+ <div>likes: {blog.likes} <button onClick={handleLike}> like </button></div>
 
 {blog.user === undefined ? <p></p> :
 <div>{blog.user.username} </div>}

@@ -97,6 +97,16 @@ const App = () => {
 
   }
 
+  const likeBlog = async (blogObject) => {
+
+  const response = await blogService.update(blogObject)
+
+    
+      setBlogs(blogs.map(blog => blog.id !== response.id ? blog : blogObject ))
+    
+
+  }
+
   const blogFormRef =useRef()
 
   
@@ -170,7 +180,7 @@ const App = () => {
         </Togglable>
 
         {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} like={likeBlog} />
       )}
       </div>
     }
