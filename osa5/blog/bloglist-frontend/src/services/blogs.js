@@ -26,7 +26,7 @@ const update = async newObject => {
   return response.data
 }
 
-const remove = async newObject =>{
+const remove = async newObject => {
   const config = {
     headers: { Authorization: token },
   }
@@ -49,5 +49,4 @@ const create = async newObject => {
   return response.data
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { getAll, create, setToken, update, remove }
