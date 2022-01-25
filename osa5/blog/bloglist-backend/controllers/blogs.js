@@ -9,8 +9,8 @@ router.get('/', async (request, response) => {
 
   response.json(blogs)
 })
-
 router.delete('/:id', async (request, response) => {
+
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
   if (!request.token || !decodedToken.id) {

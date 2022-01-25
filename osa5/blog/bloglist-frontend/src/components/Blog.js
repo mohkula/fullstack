@@ -1,5 +1,5 @@
 import React, {useState} from 'react' 
-const Blog = ({ blog, like }) => {
+const Blog = ({ blog, like, remove, loggedUsername }) => {
   
   const [visible, setVisible] = useState(false)
 
@@ -20,6 +20,14 @@ const Blog = ({ blog, like }) => {
   })
   }
 
+  const handleRemove = () =>{
+remove({title: blog.title,
+  author: blog.author,
+  url: blog.url,
+  likes : blog.likes,
+  id : blog.id})
+  }
+
   
 
 
@@ -30,6 +38,8 @@ const Blog = ({ blog, like }) => {
     borderWidth: 1,
     marginBottom: 5
   }
+
+ 
 return(
   
   <div style={blogStyle}>
@@ -43,6 +53,8 @@ return(
 
 {blog.user === undefined ? <p></p> :
 <div>{blog.user.username} </div>}
+
+{blog.user.username === loggedUsername ? <button onClick={handleRemove} style={{color: 'red'}}  >Remove</button> :null}
 
    </div> :
    <div>{blog.title} by {blog.author}</div>} <button onClick={changeVisibility}> {visible ? <div>hide</div> : <div>View</div>}</button>

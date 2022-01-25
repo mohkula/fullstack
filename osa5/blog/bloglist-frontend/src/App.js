@@ -23,7 +23,6 @@ const App = () => {
 
   useEffect(() => {
     const sortBlogs = (blogs) =>{
-      console.log('sorting')
       const sorted = blogs.sort(function(a,b){
         return a.likes -b.likes
       })
@@ -34,7 +33,6 @@ const App = () => {
       
       setBlogs( sortBlogs(blogs) )
       
-
     )  
     
   }, [])
@@ -82,9 +80,6 @@ const App = () => {
 
   const createBlog = (blogObject) =>{
 
-
-
-
     blogService
       .create(blogObject)
         .then(returnedBlog => {
@@ -109,9 +104,39 @@ const App = () => {
 
   }
 
+  const removeBlog = async (blogObject) =>{
+   const deletedId = blogObject.id
+   const deletedTitle = blogObject.title
+   const deletedAuthor = blogObject.author
+   if(window.confirm(`Do you want to delete blog ${deletedTitle} by ${deletedAuthor}?` )){
+    
+    
+    try{
+      await blogService.remove(blogObject)
+    setBlogs(blogs.filter(blog => blog.id !== deletedId))
+    setNotificationMessage(`Blog deleted`)
+    setTimeout(() => {
+      setNotificationMessage(null)
+    }, 5000)
+   }
+
+   catch(exception){
+    setErrorMessage(`You are not allowed to delete this blog`)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+   }
+  }
+  
+
+  }
+
+
   const likeBlog = async (blogObject) => {
 
   const response = await blogService.update(blogObject)
+  setBlogs(blogs.map(blog => blog.id !== response.id ? blog : blogObject ))
+
 
     
       setBlogs(blogs.map(blog => blog.id !== response.id ? blog : blogObject ))
@@ -194,7 +219,7 @@ const App = () => {
         </Togglable>
 
         {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} like={likeBlog} />
+        <Blog key={blog.id} blog={blog} like={likeBlog} remove={removeBlog} loggedUsername={user.username}/>
       )}
       </div>
     }
