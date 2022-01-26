@@ -72,9 +72,13 @@ test('liking calls the like-function correctly', () => {
 
   const likeButton = component.getByText('like')
 
+  fireEvent.click(likeButton)
+  fireEvent.click(likeButton)
 
-  expect(component.container).toHaveTextContent('testurl')
-  expect(component.container).toHaveTextContent(4)
+
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
+
 
 
 
