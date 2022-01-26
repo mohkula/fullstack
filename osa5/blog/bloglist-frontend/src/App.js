@@ -134,14 +134,18 @@ const App = () => {
 
   const likeBlog = async (blogObject) => {
 
-    const response = await blogService.update(blogObject)
-    setBlogs(blogs.map(blog => blog.id !== response.id ? blog : blogObject ))
+    try{await blogService.update(blogObject)
 
+      blogService.getAll().then(blogs =>
 
+        setBlogs(blogs)
 
-    setBlogs(blogs.map(blog => blog.id !== response.id ? blog : blogObject ))
+      )
+    }
 
-
+    catch(exception){
+      console.log(exception)
+    }
 
 
   }

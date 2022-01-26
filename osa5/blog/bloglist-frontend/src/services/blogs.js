@@ -13,7 +13,7 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-const update = async newObject => {
+const update = async (newObject) => {
   const config = {
     headers: { Authorization: token },
 

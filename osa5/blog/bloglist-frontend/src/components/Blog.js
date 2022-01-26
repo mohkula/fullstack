@@ -16,7 +16,8 @@ const Blog = ({ blog, like, remove, loggedUsername }) => {
       author: blog.author,
       url: blog.url,
       likes : likes,
-      id : blog.id
+      user: blog.user.id,
+      id: blog.id
     })
   }
 
@@ -51,13 +52,13 @@ const Blog = ({ blog, like, remove, loggedUsername }) => {
           <div>{blog.url}</div>
           <div>likes: {blog.likes} <button onClick={handleLike}> like </button></div>
 
-          {blog.user === undefined ? <p></p> :
+          {blog.user.username === undefined ? <p>no user found</p> :
             <div>{blog.user.username} </div>}
 
           {blog.user.username === loggedUsername ? <button onClick={handleRemove} style={{ color: 'red' }}  >Remove</button> :null}
 
         </div> :
-        <div>{blog.title} by {blog.author}</div>} <button onClick={changeVisibility}> {visible ? <div>hide</div> : <div>View</div>}</button>
+        <div>{blog.title} by {blog.author}</div>} <button onClick={changeVisibility}> {visible ? <div>hide</div> : <div>view</div>}</button>
 
     </div>
   )}
