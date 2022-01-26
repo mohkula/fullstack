@@ -24,7 +24,7 @@ const App = () => {
   useEffect(() => {
     const sortBlogs = (blogs) => {
       const sorted = blogs.sort(function(a,b){
-        return a.likes -b.likes
+        return b.likes -a.likes
       })
       return sorted
 
@@ -136,11 +136,14 @@ const App = () => {
 
     try{await blogService.update(blogObject)
 
-      blogService.getAll().then(blogs =>
+      const blogs = await blogService.getAll()
 
-        setBlogs(blogs)
+      blogs.sort(function(a,b){
+        return b.likes -a.likes
+      })
+      setBlogs(blogs)
 
-      )
+
     }
 
     catch(exception){
