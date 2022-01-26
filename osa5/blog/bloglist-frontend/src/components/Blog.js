@@ -46,7 +46,7 @@ const Blog = ({ blog, like, remove, loggedUsername }) => {
 
       {visible ?
 
-        <div>
+        <div className='blog'>
           <div>{blog.title} by {blog.author} </div>
           <div>{blog.url}</div>
           <div>likes: {blog.likes} <button onClick={handleLike}> like </button></div>
