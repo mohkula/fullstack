@@ -76,6 +76,64 @@ describe('Blog app', function() {
 
       })
 
+      it('A blog can be removed', function(){
+        cy.contains('view').click()
+        cy.contains('Remove').click()
+        cy.contains('Cypress rules').should('not.exist')
+
+      })
+
+
+
+    })
+
+    describe('and several blogs exist', function () {
+      beforeEach(function () {
+
+        cy.createBlog({
+          title: 'a bad blog',
+          author: 'Cypress',
+          url: 'CypressUrl',
+          likes: 1
+        })
+
+        cy.createBlog({
+          title: 'not first nor last',
+          author: 'Cypress',
+          url: 'CypressUrl',
+          likes: 999
+        })
+        cy.createBlog({
+          title: 'Most likes',
+          author: 'Cypress',
+          url: 'CypressUrl',
+          likes: 1000
+        })
+
+
+
+
+
+      })
+
+      it('Blogs are in order', function() {
+
+        cy.contains('view').click()
+        cy.contains('likes: 1000')
+
+        cy.contains('view').click()
+        cy.contains('likes: 999')
+
+        cy.contains('view').click()
+        cy.contains('likes: 1')
+
+
+
+
+
+
+      })
+
     })
   })
 
