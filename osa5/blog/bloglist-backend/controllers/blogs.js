@@ -42,7 +42,6 @@ router.put('/:id', async (request, response) => {
 
 
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-  console.log(`updated blog is: ${updatedBlog}`)
 
   response.json(updatedBlog.toJSON())
 })
