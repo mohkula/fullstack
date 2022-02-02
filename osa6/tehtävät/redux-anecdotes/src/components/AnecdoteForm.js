@@ -20,10 +20,9 @@ const AnecdoteForm = (props) =>{
          
     dispatch(addAnecdote(anecdote))
 
-        dispatch(setNotification(`you added ${anecdote}`))
-        setTimeout(() => {
-          dispatch(setNotification(''))
-        }, 5000)
+    dispatch(setNotification(`you added ${anecdote}`,5))
+
+        
       }
 
 
