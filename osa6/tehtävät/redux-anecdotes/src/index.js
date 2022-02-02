@@ -4,6 +4,13 @@ import { Provider } from 'react-redux'
 import App from './App'
 import store from './reducers/store'
 
+import { initializeAnecdotes } from './reducers/anecdoteReducer'
+
+import anecdoteService from './services/anecdotes'
+
+anecdoteService.getAll().then(notes =>
+  store.dispatch(initializeAnecdotes(notes))
+)
 
 
 ReactDOM.render(
