@@ -1,4 +1,7 @@
 
+var timeoutID
+
+
 const notificationReducer = (state = 'DefaultMessage', action) => {
 
 switch(action.type){
@@ -16,22 +19,42 @@ switch(action.type){
 }
 
 export const setNotification = (message, seconds) => {
+ 
+
+   
+
 
    return async dispatch =>{
        dispatch({type: 'SET_NOTIFICATION',
        data: {message: message}}
        )
 
-       setTimeout(() => {
+     timeoutID =   setTimeout(() => {
+        
+
+        latestTimeID === timeoutID ? 
+        dispatch({type: 'SET_NOTIFICATION',
+        data: {message: ''}})
+        :
+
+        clearTimeout(latestTimeID);
+
+
+
+   
     
-  dispatch({type: 'SET_NOTIFICATION',
-data: {message: ''}})
-    }, seconds * 1000)
+   
+     
+}, seconds * 1000)
+  
+const latestTimeID = timeoutID
+
+
+   
 
    }
 
   
 
-    return 
 }
 export default notificationReducer
