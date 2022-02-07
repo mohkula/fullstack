@@ -60,6 +60,7 @@ const Country = ({ country }) => {
       <div>population {country[0].population}</div> 
       <img src={country[0].flag} height='100' alt={`flag of ${country[0].name}`}/>  
     </div>
+    
   )
 }
 
