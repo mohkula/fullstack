@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import About from './components/About'
 import Footer from './components/Footer'
 import AnecdoteList from './components/AnecdoteList'
 import Notification from './components/Notification'
@@ -8,6 +7,8 @@ import {
   Switch, Route, Link, useHistory,
   useRouteMatch
 } from "react-router-dom"
+
+import AnecdoteForm from './components/AnecdoteForm'
 
 
 
@@ -46,7 +47,7 @@ const Menu = (props) => {
        
         <Route path="/create">
         
-          <CreateNew addNew={props.addNew} />
+          <AnecdoteForm addNew={props.addNew} />
          
          
         </Route>
@@ -82,53 +83,7 @@ const Menu = (props) => {
 
 
 
-const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
 
-
-  const handleSubmit = (e) => {
-
-  
-    e.preventDefault()
-
-const anecdoteObject = {
-  content:content,
-  author:author,
-  info:info,
-  votes: 0,
-  id:0
-}
-
-
-    props.addNew(anecdoteObject)
-
-    
-  }
-
-  return (
-    <div>
-      <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
-        </div>
-        <div>
-          author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
-        </div>
-        <div>
-          url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
-        </div>
-        <button>create</button>
-      </form>
-    </div>
-  )
-
-}
 
 const App = () => {
   const history = useHistory()
