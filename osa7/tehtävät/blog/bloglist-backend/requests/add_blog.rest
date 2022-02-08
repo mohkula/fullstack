@@ -1,0 +1,13 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InV1c2VyaSIsImlkIjoiNjFlNTUyNWNkNGQ5ZmY3ZTljY2Q3N2UyIiwiaWF0IjoxNjQyNDIwMTA3fQ.10myO-XNDrj8FtzDSbjP2_hlzdTT5RH9t9cwfL0_sYs
+
+{
+  "title": "belogi6662",
+  "author": "alfdsa",
+  "url": "http://blogid",
+  "likes": 621
+  
+
+
+}
