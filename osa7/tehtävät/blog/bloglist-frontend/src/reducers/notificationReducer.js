@@ -8,7 +8,6 @@ const notificationReducer = (state = 'DefaultMessage', action) => {
   case 'SET_NOTIFICATION':
 
     state = action.data.message
-    console.log('message',action.data.message)
     return state
 
   default: return state
@@ -22,7 +21,6 @@ export const setNotification = (message, seconds) => {
 
 
 
-  console.log('tääl')
 
   return async dispatch => {
     dispatch({ type: 'SET_NOTIFICATION',

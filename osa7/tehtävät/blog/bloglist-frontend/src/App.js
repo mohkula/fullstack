@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+//import Blog from './components/Blog'
 import blogService from './services/blogs'
 
 import Notification from './components/Notification'
@@ -11,11 +11,14 @@ import Togglable from './components/Togglable'
 import { setNotification } from './reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
 
+import { initializeBlogs } from './reducers/blogReducer'
+import { addBlog } from './reducers/blogReducer'
+import BlogList from './components/Bloglist'
+
 
 const App = () => {
 
   const dispatch = useDispatch()
-  const [blogs, setBlogs] = useState([])
 
 
 
@@ -26,20 +29,9 @@ const App = () => {
 
 
   useEffect(() => {
-    const sortBlogs = (blogs) => {
-      const sorted = blogs.sort(function(a,b){
-        return b.likes -a.likes
-      })
-      return sorted
+    dispatch(initializeBlogs())
 
-    }
-    blogService.getAll().then(blogs =>
-
-      setBlogs( sortBlogs(blogs) )
-
-    )
-
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -82,70 +74,65 @@ const App = () => {
 
   const createBlog = (blogObject) => {
 
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
+    console.log(blogObject)
+
+    dispatch(addBlog(blogObject))
 
 
-        dispatch(setNotification(`a new blog ${blogObject.title} by  ${blogObject.author} added`,5 ))
-        blogFormRef.current.toggleVisibility()
+    dispatch(setNotification(`a new blog ${blogObject.title} by  ${blogObject.author} added`,5 ))
+    blogFormRef.current.toggleVisibility()
 
-      })
-      .catch(error => {
-        console.log(error)
-        dispatch(setNotification('failed to add a blog',5))
 
-      })
+
 
 
 
   }
 
-  const removeBlog = async (blogObject) => {
-    const deletedId = blogObject.id
-    const deletedTitle = blogObject.title
-    const deletedAuthor = blogObject.author
-    if(window.confirm(`Do you want to delete blog ${deletedTitle} by ${deletedAuthor}?` )){
+  // const removeBlog = async (blogObject) => {
+  //   const deletedId = blogObject.id
+  //   const deletedTitle = blogObject.title
+  //   const deletedAuthor = blogObject.author
+  //   if(window.confirm(`Do you want to delete blog ${deletedTitle} by ${deletedAuthor}?` )){
 
 
-      try{
-        await blogService.remove(blogObject)
-        setBlogs(blogs.filter(blog => blog.id !== deletedId))
-        dispatch(setNotification('Blog deleted',5))
+  //     try{
+  //       await blogService.remove(blogObject)
+  //       setBlogs(blogs.filter(blog => blog.id !== deletedId))
+  //       dispatch(setNotification('Blog deleted',5))
 
-      }
+  //     }
 
-      catch(exception){
-        dispatch(setNotification('You are not allowed to delete this blog',5))
+  //     catch(exception){
+  //       dispatch(setNotification('You are not allowed to delete this blog',5))
 
-      }
-    }
-
-
-  }
+  //     }
+  //   }
 
 
-  const likeBlog = async (blogObject) => {
-
-    try{await blogService.update(blogObject)
-
-      const blogs = await blogService.getAll()
-
-      blogs.sort(function(a,b){
-        return b.likes -a.likes
-      })
-      setBlogs(blogs)
+  // }
 
 
-    }
+  // const likeBlog = async (blogObject) => {
 
-    catch(exception){
-      console.log(exception)
-    }
+  //   try{await blogService.update(blogObject)
+
+  //     const blogs = await blogService.getAll()
+
+  //     blogs.sort(function(a,b){
+  //       return b.likes -a.likes
+  //     })
+  //     setBlogs(blogs)
 
 
-  }
+  //   }
+
+  //   catch(exception){
+  //     console.log(exception)
+  //   }
+
+
+  // }
 
   const blogFormRef =useRef()
 
@@ -221,9 +208,9 @@ const App = () => {
 
           </Togglable>
 
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} like={likeBlog} remove={removeBlog} loggedUsername={user.username}/>
-          )}
+
+          <BlogList />
+
         </div>
       }
 
