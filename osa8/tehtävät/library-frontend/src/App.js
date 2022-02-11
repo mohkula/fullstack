@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { gql, useQuery } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 
 
 const ALL_BOOKS = gql`
@@ -15,6 +15,38 @@ query {
 
 }
 
+`
+
+
+const CREATE_BOOK = gql`
+mutation createBook($title: String!, $author: String!, $published: Int!, $genres: [String!]! ){
+addBook(
+
+  title: $title
+      author: $author 
+      published: $published
+      genres: $genres
+) {
+  title
+  author
+  published
+  genres
+  
+}
+
+
+}
+
+
+
+`
+const EDIT_BORN = gql`
+  mutation setBorn($name: String!, $setBornTo: Int!) {
+    editAuthor(name: $name, setBornTo: $setBornTo)  {
+      name
+      born
+    }
+  }
 `
 
 const All_AUTHORS = gql`
@@ -31,10 +63,31 @@ const All_AUTHORS = gql`
 
 const App = () => {
   const [page, setPage] = useState('authors')
-  const authorResult = useQuery(All_AUTHORS)
-  const bookResult = useQuery(ALL_BOOKS)
+
+  const [createBook] = useMutation(CREATE_BOOK)
+
+  const [editAuthor] = useMutation(EDIT_BORN)
+
+  const authorResult = useQuery(All_AUTHORS,{
+    pollInterval: 2000
+  })
+  const bookResult = useQuery(ALL_BOOKS,{
+    pollInterval: 2000
+  })
   
- 
+ const addNewBook = (title, author, published, genres) =>{
+  
+  createBook({variables:{title,author,published,genres}})
+
+
+ }
+
+ const editAuthorBorn = (name, setBornTo) =>{
+
+  
+editAuthor({variables:{name,setBornTo}})
+
+ }
 
   return (
     <div>
@@ -47,6 +100,7 @@ const App = () => {
       {authorResult.loading ?  <div>loading...</div> :  <Authors
         show={page === 'authors'}
         authorList = {authorResult.data.allAuthors}
+        editAuthor={editAuthorBorn}
         
       />
       }
@@ -63,6 +117,7 @@ const App = () => {
 
       <NewBook
         show={page === 'add'}
+        addNewBook ={addNewBook}
       />
 
     </div>
