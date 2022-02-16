@@ -1,14 +1,23 @@
-const {  UserInputError } = require('apollo-server')
+const {  UserInputError, AuthenticationError } = require('apollo-server')
 const { argsToArgsConfig } = require('graphql/type/definition')
+
+const jwt = require('jsonwebtoken')
+
+const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
 
 
 const Author = require('./../author')
 const Book = require('./../book')
+const User = require('./../user')
 
 
 
 const resolvers = {
     Query: {
+
+      me: (root,args,context) =>{
+        return context.currentUser
+      },
   authorCount: () => Author.collection.countDocuments(),
   bookCount: () => Book.collection.countDocuments(),
   
@@ -43,7 +52,13 @@ const resolvers = {
    
   
     Mutation: {
-      addBook: async(root, args) => {
+      addBook: async(root, args, context) => {
+
+        const currentUser = context.currentUser
+
+        if (!currentUser) {
+          throw new AuthenticationError("not authenticated")
+        }
 
        let author = await Author.find({name: {$in: args.author}})
        if(author.length === 0){
@@ -109,7 +124,13 @@ return newBook
         
       
   
-      editAuthor: async(root, args) => {
+      editAuthor: async(root, args, context) => {
+
+        const currentUser = context.currentUser
+
+        if (!currentUser) {
+          throw new AuthenticationError("not authenticated")
+        }
 
         const authors = await Author.find({})
 
@@ -124,6 +145,34 @@ return newBook
   
       },
   
+
+      createUser: async (root, args) => {
+        const user = new User({ username: args.username,
+        favoriteGenre: args.favoriteGenre })
+    
+        return user.save()
+          .catch(error => {
+            throw new UserInputError(error.message, {
+              invalidArgs: args,
+            })
+          })
+      },
+      login: async (root, args) => {
+        const user = await User.findOne({ username: args.username })
+    
+        if ( !user || args.password !== 'secret' ) {
+          throw new UserInputError("wrong credentials")
+        }
+    
+        const userForToken = {
+          username: user.username,
+          id: user._id,
+        }
+    
+        return { value: jwt.sign(userForToken, JWT_SECRET) }
+      },
+
+
     }
   }
   module.exports = resolvers
