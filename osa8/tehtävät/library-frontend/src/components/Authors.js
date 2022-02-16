@@ -48,7 +48,10 @@ setBorn('')
 <div>
   <p></p>
 </div>
-      <form onSubmit={submit}>
+      
+
+        {props.token ? 
+        <form onSubmit={submit}>
         <h2>set birthyear</h2>
         <div>
           name
@@ -75,7 +78,13 @@ setBorn('')
       </form>
 
 
-    </div>
+   
+        :
+        null
+        }
+
+</div>
+      
   )
 }
 
