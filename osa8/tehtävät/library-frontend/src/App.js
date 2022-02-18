@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { gql, useMutation, useQuery, useApolloClient} from '@apollo/client'
+import { gql, useMutation, useQuery, useLazyQuery, useApolloClient} from '@apollo/client'
 
 import LoginForm from './components/login'
+import Recommended from './components/Recommended'
 
 
 const ALL_BOOKS = gql`
@@ -16,11 +17,43 @@ query {
     author{
       name
     }
+    genres
   }
 
 }
 
 `
+const USER = gql`
+
+query{
+  me {
+    username
+    id
+    favoriteGenre
+  }
+}
+
+
+`
+
+const FILTERED_BOOKS = gql`
+query($genre: String!) {
+  
+  allBooks(genre: $genre) {
+title
+published
+    author{
+      name
+    }
+    genres
+
+
+  }
+
+}
+
+`
+
 
 
 const CREATE_BOOK = gql`
@@ -98,21 +131,88 @@ const App = () => {
 
   const [editAuthor] = useMutation(EDIT_BORN)
 
-  
+  const [genres, setGenres] = useState([])
+  const [favGenre, setFavGenre] = useState(null)
+
+
+ 
 
   const authorResult = useQuery(All_AUTHORS,{
     pollInterval: 2000
   })
   const bookResult = useQuery(ALL_BOOKS,{
     pollInterval: 2000
+    
   })
+
+
+  const userInfo = useQuery(USER,{
+    pollInterval:2000,
+    skip: !login
+  
+  })
+
+
+  const [filteredBooks, filteredData] = useLazyQuery(FILTERED_BOOKS,{
+   
+   variables: {genre: favGenre}, 
+  
+
+  })
+
+
+  
+const handleGenreChoice = (genre) =>{
+  
+ setFavGenre(genre)
+
+  if(genre){
+    filteredBooks({variables:{genre} })
+  }
+
+  else{
+    setFavGenre('all')
+  }
+  
+
+  
+
+
+}
+
+
+
+
+
+
+  const addGenres = () =>{
+    let g = genres
+
+   
+    bookResult.data.allBooks.map(book => {
+      
+      book.genres.map( genre =>{
+       
+        if(!(g.includes(genre))){
+         g = g.concat(genre)
+        
+          
+         
+        }
+      })
+      
+    })
+    
+    setGenres(g)
+    
+  }
   
 
   useEffect(() => {
     if ( result.data ) {
       const token = result.data.login.value
       setToken(token)
-      console.log("token: ", token)
+      
       localStorage.setItem('library-user-token', token)
     }
   }, [result.data]) // eslint-disable-line
@@ -128,6 +228,7 @@ const App = () => {
  const addNewBook = (title, author, published, genres) =>{
   
   createBook({variables:{title,author,published,genres}})
+ 
 
 
  }
@@ -143,6 +244,17 @@ editAuthor({variables:{name,setBornTo}})
    return (
      <div>
  <button onClick={() => setPage('add')}>add book</button>
+ <button onClick={() => {
+   
+   setPage('recommendations')
+   if(userInfo.data.me){
+   handleGenreChoice(userInfo.data.me.favoriteGenre)
+   }
+   else{
+     handleGenreChoice(null)
+   }
+
+}}>recommendations</button>
  <button onClick={logout}>logout</button>
  </div>
    )
@@ -151,9 +263,20 @@ editAuthor({variables:{name,setBornTo}})
 
   return (
     <div>
+
+
+
+      
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
-        <button onClick={() => setPage('books')}>books</button>
+        <button onClick={() => {
+          setPage('books')
+          addGenres()
+              }
+              
+              }>
+          
+          books</button>
        
 
         {!token ?        
@@ -164,6 +287,20 @@ editAuthor({variables:{name,setBornTo}})
 loggedView()
         }
       </div>
+
+
+      {page === 'recommendations' ?  
+        
+        <Recommended 
+        books={filteredData}
+        favGen= {favGenre}
+        
+        
+        />
+      : null }
+
+
+
 
       {page === 'login' ?  
         <div>
@@ -193,6 +330,11 @@ loggedView()
 {page === 'books' ?  <Books
         
         books = {bookResult.data.allBooks}
+        genres = {genres}
+        handleGenreChoice = {handleGenreChoice}
+        favorite={favGenre}
+        filteredBooks = {filteredData}
+        
       />: null }
       
 
