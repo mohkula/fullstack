@@ -1,31 +1,31 @@
 
-type Result = String
+type Result = String;
 
 const calculateBmi =(height: number, weight: number): Result =>{
 
     if(height === 0 || weight === 0){
-        return "Height nor weight shall not be zero"
+        return "Height nor weight shall not be zero";
     }
-    const bmi = weight/Math.pow(height/100, 2)
+    const bmi = weight/Math.pow(height/100, 2);
     
 
    if(bmi >= 18.5 && bmi <= 25){
-       return "Normal (healthy weight)"
+       return "Normal (healthy weight)";
    }
 
    if(bmi > 25){
 
-    return "Over (overweight)"
+    return "Over (overweight)";
    }
 
    if(bmi < 18.5 ){
-       return "Under (underweight)"
+       return "Under (underweight)";
    }
 
 
 
-    return "bmi"
+    return "bmi";
 
 }
 
-console.log(calculateBmi(180, 74))
+console.log(calculateBmi(180, 74));
