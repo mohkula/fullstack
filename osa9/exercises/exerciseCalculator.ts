@@ -23,7 +23,13 @@ const exerciseCalculator = ( ar: Array<number>, target: number) : exerciseResult
     })
 
     if(totalHours === 0){
-        return null
+        return {periodLength: 0,
+            trainingDays: 0,
+            success: false,
+            rating: 0,
+            ratingDescription: "bad params",
+            target: target,
+            average: 0,}
     }
 
     const average = totalHours / periodLength;

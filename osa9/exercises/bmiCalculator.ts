@@ -1,4 +1,5 @@
 
+
 type Result = String;
 
 const calculateBmi =(height: number, weight: number): Result =>{
@@ -22,6 +23,7 @@ const calculateBmi =(height: number, weight: number): Result =>{
        return "Under (underweight)";
    }
 
+   return "bad params"
 
 
     
@@ -29,3 +31,5 @@ const calculateBmi =(height: number, weight: number): Result =>{
 }
 
 console.log(calculateBmi(Number(process.argv[2]), Number(process.argv[3])));
+
+export default calculateBmi;
