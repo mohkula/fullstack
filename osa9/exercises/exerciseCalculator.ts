@@ -22,6 +22,10 @@ const exerciseCalculator = ( ar: Array<number>, target: number) : exerciseResult
     }
     })
 
+    if(totalHours === 0){
+        return null
+    }
+
     const average = totalHours / periodLength;
 
     const success = average >= target
@@ -51,11 +55,15 @@ return {
     average: average,
 }
 
-
-
 }
 
 
-console.log(exerciseCalculator([3, 0, 2, 4.5, 0, 3, 1] ,2 ))
+
+let arr = [];
+for (let i = 3; i< process.argv.length; i++){
+arr.push(Number(process.argv[i]))
+}
 
 
+
+console.log(exerciseCalculator(arr,Number(process.argv[2])))
