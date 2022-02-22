@@ -20,7 +20,7 @@ const exerciseCalculator = ( ar: Array<number>, target: number) : exerciseResult
         trainingDays = trainingDays + 1;
         totalHours = totalHours + value;
     }
-    })
+    });
 
     if(totalHours === 0){
         return {periodLength: 0,
@@ -29,19 +29,19 @@ const exerciseCalculator = ( ar: Array<number>, target: number) : exerciseResult
             rating: 0,
             ratingDescription: "bad params",
             target: target,
-            average: 0,}
+            average: 0,};
     }
 
     const average = totalHours / periodLength;
 
-    const success = average >= target
+    const success = average >= target;
 let rating = 1;
 let ratingDescription = 'not too bad but could be better';
     
 
 if(average - target > 2){
     rating = 2;
-    ratingDescription = 'nice job at reatching your target';
+    ratingDescription = 'nice job at reaching your target';
 }
 
 if(average - target > 5){
@@ -59,17 +59,20 @@ return {
     ratingDescription: ratingDescription,
     target: target,
     average: average,
-}
+};
 
-}
+};
 
 
 
-let arr = [];
+const arr = [];
 for (let i = 3; i< process.argv.length; i++){
-arr.push(Number(process.argv[i]))
+arr.push(Number(process.argv[i]));
 }
 
 
 
-console.log(exerciseCalculator(arr,Number(process.argv[2])))
+//console.log(exerciseCalculator(arr,Number(process.argv[2])));
+
+
+export default exerciseCalculator;
