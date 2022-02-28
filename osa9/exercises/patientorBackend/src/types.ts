@@ -16,6 +16,15 @@ export interface Diagnose {
 
   export type PatientNossn = Omit<Patient,'ssn'>;
 
+  export type newPatient = Omit<Patient, 'id'>;
+
+  export enum Gender{
+    Male = 'male',
+    Female = 'female',
+    Other = 'other'
+
+  }
+
   
 
 
