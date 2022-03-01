@@ -1,18 +1,19 @@
+import Part from './Part'
 
-interface courseContent {
-    courseParts: Array<{name: string, exerciseCount: number}>
-  }
 
-const content = (props:courseContent) =>{
+
+const content = (props: { courseParts: any[]; }) =>{
     
 return(
 
     <div>
-        <h2>Courses:</h2>
+
+
+        
         {props.courseParts.map(x => {
-       return <li key={x.name}>
-           {x.name} exercises: {x.exerciseCount}
-           </li>
+       return <Part courseDetails={x} key={x.name}/>
+            
+           
     })}</div>
 )
 
