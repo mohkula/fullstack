@@ -2,14 +2,15 @@ import { newPatient, Gender } from "./types";
 
 
 const toNewPatient = (name: unknown, dateOfBirth: unknown, ssn: unknown,
-    gender: unknown, occupation: unknown): newPatient => {
+    gender: unknown, occupation: unknown, ): newPatient => {
 
 const newPatient: newPatient = {
 name: parseText(name),
 dateOfBirth: parseDate(dateOfBirth),
 ssn: parseText(ssn),
 gender: parseGender(gender),
-occupation: parseText(occupation)
+occupation: parseText(occupation),
+entries: []
 
 };
 
