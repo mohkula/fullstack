@@ -19,6 +19,11 @@ const getEntries = (): PublicPatient[] => {
 
 };
 
+
+
+
+
+
 const addPatient = (entry: newPatient): Patient =>{
 
     const id: string =  uuid();
@@ -35,8 +40,10 @@ return newPatient;
    };
 
 
-   const findById = (id: string): PublicPatient|undefined => {
+   const findById = (id: string): Patient|undefined => {
     const patient = patientData.find(d => d.id === id);
+
+   
     return patient;
   };
 
@@ -48,6 +55,7 @@ return newPatient;
 
 export default {
   getEntries,
+  
   addPatient,
   findById
 };
