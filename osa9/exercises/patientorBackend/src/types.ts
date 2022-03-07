@@ -3,9 +3,47 @@ export interface Diagnose {
     name: string;
     latin?: string;
   }
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface Entry {
+
+  export interface BaseEntry {
+    id: string;
+    description: string;
+    date: string;
+    specialist: string;
+    diagnosisCodes?: Array<Diagnose['code']>;
   }
+
+
+  export enum HealthCheckRating {
+    "Healthy" = 0,
+    "LowRisk" = 1,
+    "HighRisk" = 2,
+    "CriticalRisk" = 3
+  }
+  
+ export interface HospitalEntry extends BaseEntry {
+    type: "HealthCheck";
+    healthCheckRating?: HealthCheckRating;
+    discharge?: {date: string,
+    criteria: string};
+  }
+
+
+  export interface OccupationalHealthcareEntry extends BaseEntry {
+    type:"OccupationalHealthcare";
+    employerName: string;
+    sickLeave?: {startDate: string,
+                endDate:string};
+
+
+  }
+
+
+
+  
+  export type Entry = 
+  |HospitalEntry
+  |OccupationalHealthcareEntry;
+  
   
   export interface Patient {
 
