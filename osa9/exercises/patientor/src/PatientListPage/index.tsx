@@ -9,7 +9,7 @@ import AddPatientModal from "../AddPatientModal";
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 import HealthRatingBar from "../components/HealthRatingBar";
-import { useStateValue } from "../state";
+import { useStateValue, setOnePatient, addPatient } from "../state";
 import { useHistory } from "react-router-dom";
 
 
@@ -35,7 +35,7 @@ const handlePatientInfo = async(patientId: string) => {
 
     
 
-  dispatch({ type: "SET_ONE_PATIENT", payload: patientInfo });
+  dispatch(setOnePatient(patientInfo));
 
   history.push(`/patients/${patientId}`);
 };
@@ -46,7 +46,7 @@ const handlePatientInfo = async(patientId: string) => {
         `${apiBaseUrl}/patients`,
         values
       );
-      dispatch({ type: "ADD_PATIENT", payload: newPatient });
+      dispatch(addPatient(newPatient));
       closeModal();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
@@ -83,7 +83,7 @@ const handlePatientInfo = async(patientId: string) => {
               }} > 
 
 
-              {patient.name} {patient.ssn}
+              {patient.name} 
               </Button> </Table.Cell>
               <Table.Cell>{patient.gender}</Table.Cell>
               <Table.Cell>{patient.occupation}</Table.Cell>

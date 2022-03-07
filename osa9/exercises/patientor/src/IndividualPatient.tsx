@@ -3,7 +3,7 @@ import React from 'react';
 import { Patient } from './types';
 import { apiBaseUrl } from './constants';
 
-import { useStateValue } from "./state";
+import { useStateValue, setOnePatient } from "./state";
 import { useParams } from 'react-router-dom';
 
 
@@ -25,7 +25,7 @@ const individualPatientList = () => {
     const {data: patientFromApi} = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}` );
     
     
-    dispatch({type: "SET_ONE_PATIENT", payload: patientFromApi});
+    dispatch(setOnePatient(patientFromApi));
     
 }
 
