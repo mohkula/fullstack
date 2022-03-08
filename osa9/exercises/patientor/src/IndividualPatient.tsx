@@ -1,9 +1,9 @@
 import React from 'react';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Patient, Entry, Diagnosis } from './types';
-
+import { Patient, Diagnosis } from './types';
+import entryDetails from './components/EntryDetails';
 import { useStateValue } from "./state";
 import { useParams } from 'react-router-dom';
+
 
 
 
@@ -30,6 +30,7 @@ const getDiagnosisDescription = (code: string) =>{
 return diag?.name;
 };
 
+
 return (
 
    <div>{patient ? <div>{patient.name} {patient.gender} 
@@ -43,13 +44,23 @@ return (
         <div key = {e.id}> 
         {e.date} {e.description}
 
-        {e.diagnosisCodes?.map(dc => (
-           <li key={dc}>
+        {e.diagnosisCodes ? 
+        
+        e.diagnosisCodes.map(dc => (
+            <li key={dc}>
+ 
+                {dc} {getDiagnosisDescription(dc)}
+                {entryDetails(e)}
+               
+                
+ 
+            </li>
+         ))
+        
+        : entryDetails(e)}
+        
 
-               {dc} {getDiagnosisDescription(dc)}
 
-           </li>
-        ))}
 
 
 
