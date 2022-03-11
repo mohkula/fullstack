@@ -30,12 +30,19 @@ const handlePatientInfo = async(patientId: string) => {
 
 
 
- const { data: patientInfo } = await axios.get<Patient>(
+
+
+ try{const { data: patientInfo } = await axios.get<Patient>(
     `${apiBaseUrl}/patients/${patientId}`);
-
     
+    
+    dispatch(setOnePatient(patientInfo));
+  }
 
-  dispatch(setOnePatient(patientInfo));
+  catch(error){
+    console.log(error);
+  }
+  console.log(3);
 
   history.push(`/patients/${patientId}`);
 };
@@ -75,6 +82,7 @@ const handlePatientInfo = async(patientId: string) => {
               <Table.Cell><Button  onClick={async () => {
                 if(!patient.ssn){
                
+                  console.log("no ssn");
                 await handlePatientInfo(patient.id);
                 }
                 else{

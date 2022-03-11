@@ -1,19 +1,49 @@
 import React from 'react';
 import { Patient, Diagnosis } from './types';
 import entryDetails from './components/EntryDetails';
-import { useStateValue } from "./state";
+import { useStateValue, setOnePatient } from "./state";
 import { useParams } from 'react-router-dom';
-
-
-
+import { Button } from 'semantic-ui-react';
+import AddEntryModal from './AddPatientModal/entryIndex';
+import { PatientEntryValues } from './AddPatientModal/AddEntryForm';
+import axios from "axios";
+import { apiBaseUrl } from './constants';
 
 
 
 const individualPatientList = () => {
 
-    const [{ patients,diagnosis } ] = useStateValue();
- 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [error, setError] = React.useState<string | undefined>();
 
+    const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+    const openModal = (): void => setModalOpen(true);
+
+
+    const closeModal = (): void => {
+        setModalOpen(false);
+        setError(undefined);
+      };
+    const [{ patients,diagnosis },dispatch ] = useStateValue();
+ 
+const submitNewEntry = async(values: PatientEntryValues) =>{
+    
+    try {
+        const { data: updatedPatient } = await axios.post<Patient>(
+          `${apiBaseUrl}/patients/${id}`,
+          values
+        );
+       
+        dispatch(setOnePatient(updatedPatient));
+
+        closeModal();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        console.error(e.response?.data || 'Unknown Error');
+        setError(e.response?.data?.error || 'Unknown error');
+      }
+
+};
 
     const { id } = useParams<{ id: string }>();
     
@@ -73,10 +103,15 @@ return (
     }
     
     
-    
+    <AddEntryModal
+        modalOpen={modalOpen}
+        onSubmit={submitNewEntry}
+        error={error}
+        onClose={closeModal}
+      />
     
 
-    
+    <Button onClick={() => openModal()}>Add New Entry</Button>
 
     </div>
 );
